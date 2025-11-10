@@ -1,38 +1,50 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const connectToDatabase = require('../models/db');
+const connectToDatabase = require("../models/db");
 
-// Search for gifts
-router.get('/', async (req, res, next) => {
+// GET all gifts
+router.get('/', async (req, res) => {
     try {
-        // Task 1: Connect to MongoDB
         const db = await connectToDatabase();
+        const collection = db.collection("gifts");
+        const gifts = await collection.find().toArray();
+        res.json(gifts);
+    } catch (e) {
+        console.error('Error fetching gifts:', e);
+        res.status(500).send('Error fetching gifts');
+    }
+});
 
+// GET gift by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const db = await connectToDatabase();
         const collection = db.collection("gifts");
 
-        // Initialize the query object
-        let query = {};
+        const id = req.params.id;
 
-        // Add the name filter if name parameter exists
-        if (req.query.name) {
-            query.name = { $regex: req.query.name, $options: "i" }; 
+        const gift = await collection.findOne({ id: id });
+
+        if (!gift) {
+            return res.status(404).send('Gift not found');
         }
 
-        // Task 3: Add other filters to the query
-        if (req.query.category) {
-            query.category = req.query.category;
-        }
-        if (req.query.condition) {
-            query.condition = req.query.condition;
-        }
-        if (req.query.age_years) {
-            query.age_years = { $lte: parseInt(req.query.age_years) };
-        }
+        res.json(gift);
 
-        // Task 4: Fetch filtered gifts
-        const gifts = await collection.find(query).toArray();
+    } catch (e) {
+        console.error('Error fetching gift:', e);
+        res.status(500).send('Error fetching gift');
+    }
+});
 
-        res.json(gifts);
+// Add a new gift
+router.post('/', async (req, res, next) => {
+    try {
+        const db = await connectToDatabase();
+        const collection = db.collection("gifts");
+        const gift = await collection.insertOne(req.body);
+
+        res.status(201).json(gift.ops[0]);
     } catch (e) {
         next(e);
     }
