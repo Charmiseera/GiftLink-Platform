@@ -3,7 +3,8 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const pino = require('pino');
-const { connectToDatabase } = require('../models/db');
+const connectToDatabase = require('../models/db');
+
 
 
 dotenv.config();
