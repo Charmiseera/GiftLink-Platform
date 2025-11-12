@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const express = require("express");
 const { ObjectId } = require("mongodb"); // ✅ Import ObjectId for _id lookups
 const router = express.Router();
