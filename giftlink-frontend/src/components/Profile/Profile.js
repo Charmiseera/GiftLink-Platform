@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Profile.css'
-import {urlConfig} from '../../config';
+import './Profile.css';
+import { urlConfig } from '../../config';
 import { useAppContext } from '../../context/AuthContext';
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
- const [updatedDetails, setUpdatedDetails] = useState({});
- const {setUserName} = useAppContext();
- const [changed, setChanged] = useState("");
-
- const [editMode, setEditMode] = useState(false);
+  const [updatedDetails, setUpdatedDetails] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [changed, setChanged] = useState("");
   const navigate = useNavigate();
+
+  const { setUserName } = useAppContext();
+
   useEffect(() => {
     const authtoken = sessionStorage.getItem("auth-token");
     if (!authtoken) {
@@ -21,113 +22,138 @@ const Profile = () => {
     }
   }, [navigate]);
 
+  // ✅ Fetch user profile details
   const fetchUserProfile = async () => {
+    try {
+      const name = sessionStorage.getItem("name");
+      const email = sessionStorage.getItem("email");
+      const storedUserDetails = { name, email };
+      setUserDetails(storedUserDetails);
+      setUpdatedDetails(storedUserDetails);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleInputChange = (e) => {
+    setUpdatedDetails({
+      ...updatedDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // ✅ Handle profile update submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const authtoken = sessionStorage.getItem("auth-token");
       const email = sessionStorage.getItem("email");
-      const name=sessionStorage.getItem('name');
-      if (name || authtoken) {
-                const storedUserDetails = {
-                  name: name,
-                  email:email
-                };
 
-                setUserDetails(storedUserDetails);
-                setUpdatedDetails(storedUserDetails);
-              }
-} catch (error) {
-  console.error(error);
-  // Handle error case
-}
-};
+      if (!authtoken || !email) {
+        navigate("/app/login");
+        return;
+      }
 
-const handleEdit = () => {
-setEditMode(true);
-};
+      const payload = { ...updatedDetails };
 
-const handleInputChange = (e) => {
-setUpdatedDetails({
-  ...updatedDetails,
-  [e.target.name]: e.target.value,
-});
-};
-const handleSubmit = async (e) => {
-  e.preventDefault();
+      // ✅ Send request to backend
+      const response = await fetch(`${urlConfig.backendUrl}/api/auth/update`, {
+        method: "PUT", // Step 1: Task 1 - Use PUT for updating
+        headers: {
+          "Content-Type": "application/json", // Step 1: Task 2 - Add headers
+          "auth-token": authtoken, // Step 1: Task 3 - Pass token for authentication
+        },
+        body: JSON.stringify(payload),
+      });
 
-  try {
-    const authtoken = sessionStorage.getItem("auth-token");
-    const email = sessionStorage.getItem("email");
+      if (response.ok) {
+        // ✅ Step 1: Task 4 - Update session storage
+        sessionStorage.setItem("name", updatedDetails.name);
+        setUserName(updatedDetails.name);
 
-    if (!authtoken || !email) {
-      navigate("/app/login");
-      return;
+        // ✅ Step 1: Task 5 - Update state and show success
+        setUserDetails(updatedDetails);
+        setEditMode(false);
+        setChanged("Name Changed Successfully!");
+
+        setTimeout(() => {
+          setChanged("");
+          navigate("/app");
+        }, 1000);
+      } else {
+        throw new Error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Profile update error:", error);
     }
+  };
 
-    const payload = { ...updatedDetails };
-    const response = await fetch(`${urlConfig.backendUrl}/api/auth/update`, {
-      //Step 1: Task 1
-      //Step 1: Task 2
-      //Step 1: Task 3
-    });
+  return (
+    <div className="profile-container">
+      {editMode ? (
+        <form onSubmit={handleSubmit} className="profile-form">
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={userDetails.email}
+              disabled
+              className="form-control mb-3"
+            />
+          </label>
 
-    if (response.ok) {
-      // Update the user details in session storage
-      //Step 1: Task 4
-      //Step 1: Task 5
-      setUserDetails(updatedDetails);
-      setEditMode(false);
-      // Display success message to the user
-      setChanged("Name Changed Successfully!");
-      setTimeout(() => {
-        setChanged("");
-        navigate("/");
-      }, 1000);
+          <label>
+            Name
+            <input
+              type="text"
+              name="name"
+              value={updatedDetails.name}
+              onChange={handleInputChange}
+              className="form-control mb-3"
+            />
+          </label>
 
-    } else {
-      // Handle error case
-      throw new Error("Failed to update profile");
-    }
-  } catch (error) {
-    console.error(error);
-    // Handle error case
-  }
-};
+          <button type="submit" className="btn btn-primary w-100">
+            Save Changes
+          </button>
+        </form>
+      ) : (
+        <div className="profile-details text-center">
+          <h2 className="fw-bold">Hi, {userDetails.name}</h2>
+          <p>
+            <b>Email:</b> {userDetails.email}
+          </p>
 
-return (
-<div className="profile-container">
-  {editMode ? (
-<form onSubmit={handleSubmit}>
-<label>
-  Email
-  <input
-    type="email"
-    name="email"
-    value={userDetails.email}
-    disabled // Disable the email field
-  />
-</label>
-<label>
-   Name
-   <input
-     type="text"
-     name="name"
-     value={updatedDetails.name}
-     onChange={handleInputChange}
-   />
-</label>
+          <button
+            onClick={handleEdit}
+            className="btn btn-outline-primary mt-2"
+          >
+            Edit Profile
+          </button>
 
-<button type="submit">Save</button>
-</form>
-) : (
-<div className="profile-details">
-<h1>Hi, {userDetails.name}</h1>
-<p> <b>Email:</b> {userDetails.email}</p>
-<button onClick={handleEdit}>Edit</button>
-<span style={{color:'green',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{changed}</span>
-</div>
-)}
-</div>
-);
+          {changed && (
+            <span
+              style={{
+                color: "green",
+                display: "block",
+                fontStyle: "italic",
+                fontSize: "13px",
+                marginTop: "10px",
+              }}
+            >
+              {changed}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Profile;

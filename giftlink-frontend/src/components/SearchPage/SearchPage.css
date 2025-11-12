@@ -1,26 +1,119 @@
-/* Task 1: Style the search input field */
+/* 🌸 Task 1: Style the search input field */
 .search-input {
-    /* Insert specific CSS properties here */
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-right: 10px;
 }
 
-/* Task 2: Style the search button */
+/* 🌸 Task 2: Style the search button */
 .search-button {
-    /* Insert specific CSS properties here */
+  width: 20%;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Task 3: Customize dropdown filters */
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+/* 🌸 Task 3: Customize dropdown filters */
 .dropdown-filter {
-    /* Insert specific CSS properties here */
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  font-size: 15px;
+  background-color: #fff;
 }
 
-/* Task 4: Style the age range slider */
+/* 🌸 Task 4: Style the age range slider */
 .age-range-slider {
-    /* Insert specific CSS properties here */
+  width: 100%;
+  margin: 15px 0;
 }
 
-/* Task 5: Enhance search results cards appearance */
+/* 🌸 Task 5: Enhance search results cards appearance */
 .search-results-card {
-    /* Insert specific CSS properties here */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease;
+  background-color: #fff;
 }
 
-/* Additional placeholders for tasks 6 to 10 */
+/* 🌸 Task 6: Style the “No products found” alert message */
+.no-results-alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem 1.25rem;
+  margin-top: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+/* 🌸 Task 7: Hover effect for search results cards */
+.search-results-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+/* 🌸 Task 8: Ensure images are displayed appropriately */
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+/* 🌸 Task 9: Responsive layout for various devices */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .search-button {
+    width: 100%;
+  }
+
+  .dropdown-filter {
+    font-size: 14px;
+  }
+
+  .results-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 🌸 Task 10: Overall cohesive design */
+.search-page-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.filter-section {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.results-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
