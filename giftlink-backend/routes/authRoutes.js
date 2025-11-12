@@ -5,14 +5,12 @@ const dotenv = require('dotenv');
 const pino = require('pino');
 const connectToDatabase = require('../models/db');
 
-
-
 dotenv.config();
 
 const router = express.Router();
 const logger = pino();
 
-// REGISTER ENDPOINT
+// ✅ REGISTER ENDPOINT
 router.post('/register', async (req, res) => {
     try {
         // Connect to giftsdb
@@ -50,6 +48,50 @@ router.post('/register', async (req, res) => {
     } catch (e) {
         console.error(e);
         return res.status(500).send("Internal server error");
+    }
+});
+
+
+// ✅ LOGIN ENDPOINT
+router.post('/login', async (req, res) => {
+    try {
+        // Task 1: Connect to MongoDB
+        const db = await connectToDatabase();
+
+        // Task 2: Access the users collection
+        const usersCollection = db.collection('users');
+
+        const { email, password } = req.body;
+
+        // Task 3: Check if the user exists
+        const user = await usersCollection.findOne({ email: email });
+        if (!user) {
+            return res.status(400).json({ error: 'User not found. Please register first.' });
+        }
+
+        // Task 4: Validate the password
+        const isMatch = await bcryptjs.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid credentials. Please try again.' });
+        }
+
+        // Task 5: Extract user details
+        const userName = user.firstName;
+        const userEmail = user.email;
+
+        // Task 6: Create JWT token
+        const authtoken = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        logger.info("User logged in successfully");
+        return res.status(200).json({ authtoken, userName, userEmail });
+
+    } catch (e) {
+        console.error('Login error:', e);
+        return res.status(500).send('Internal server error');
     }
 });
 
