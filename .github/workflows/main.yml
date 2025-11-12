@@ -26,7 +26,7 @@ jobs:
         run: |
           # Finds and lints key backend files
           find ./giftlink-backend -name app.js -exec jshint {} +
-          find ./giftlink-backend -name authRoutes.js -exec jshint {} +
+          find ./giftlink-backend -name authRoutes.js -exec jshint --esversion 8 {} +
           find ./giftlink-backend -name giftRoutes.js -exec jshint {} +
           find ./giftlink-backend -name searchRoutes.js -exec jshint {} +
           echo "✅ Linted all backend JS files successfully"
