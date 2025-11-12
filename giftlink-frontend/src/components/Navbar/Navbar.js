@@ -1,26 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AuthContext';
 
 export default function Navbar() {
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <a className="navbar-brand" href="/">GiftLink</a>
+  const { isLoggedIn, setIsLoggedIn, userName, setUserName } = useAppContext();
+  const navigate = useNavigate();
 
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
+  useEffect(() => {
+    const token = sessionStorage.getItem('auth-token');
+    const name = sessionStorage.getItem('name');
+    if (token && name) {
+      setIsLoggedIn(true);
+      setUserName(name);
+    } else {
+      setIsLoggedIn(false);
+      setUserName('');
+    }
+  }, [setIsLoggedIn, setUserName]);
 
-                    {/* Task 1: Add links to Home and Gifts below */}
+  const handleLogout = () => {
+    sessionStorage.clear();
+    setIsLoggedIn(false);
+    navigate('/app');
+  };
 
-                    <li className="nav-item">
-                        <a className="nav-link" href="/">Home</a>
-                    </li>
+  return (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <a className="navbar-brand" href="/home.html">GiftLink</a>
+      <div className="collapse navbar-collapse justify-content-end">
+        <ul className="navbar-nav">
+          <li><Link className="nav-link" to="/app">Gifts</Link></li>
+          <li><Link className="nav-link" to="/app/search">Search</Link></li>
 
-                    <li className="nav-item">
-                        <a className="nav-link" href="/app">Gifts</a>
-                    </li>
-
-                </ul>
-            </div>
-        </nav>
-    );
+          {isLoggedIn ? (
+            <>
+              <li className="nav-item"><span className="nav-link">Welcome, {userName}</span></li>
+              <li className="nav-item"><button className="btn btn-link nav-link text-danger" onClick={handleLogout}>Logout</button></li>
+            </>
+          ) : (
+            <>
+              <li><Link className="nav-link" to="/app/login">Login</Link></li>
+              <li><Link className="nav-link" to="/app/register">Register</Link></li>
+            </>
+          )}
+        </ul>
+      </div>
+    </nav>
+  );
 }
 
