@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Profile.css';
-import { urlConfig } from '../../config';
-import { useAppContext } from '../../context/AuthContext';
+import "./Profile.css";
+import { urlConfig } from "../../config";
+import { useAppContext } from "../../context/AuthContext";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
@@ -10,7 +10,6 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [changed, setChanged] = useState("");
   const navigate = useNavigate();
-
   const { setUserName } = useAppContext();
 
   useEffect(() => {
@@ -22,8 +21,8 @@ const Profile = () => {
     }
   }, [navigate]);
 
-  // ✅ Fetch user profile details
-  const fetchUserProfile = async () => {
+  // ✅ Fetch user profile details from session
+  const fetchUserProfile = () => {
     try {
       const name = sessionStorage.getItem("name");
       const email = sessionStorage.getItem("email");
@@ -35,9 +34,7 @@ const Profile = () => {
     }
   };
 
-  const handleEdit = () => {
-    setEditMode(true);
-  };
+  const handleEdit = () => setEditMode(true);
 
   const handleInputChange = (e) => {
     setUpdatedDetails({
@@ -46,7 +43,7 @@ const Profile = () => {
     });
   };
 
-  // ✅ Handle profile update submission
+  // ✅ Handle profile update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -59,24 +56,24 @@ const Profile = () => {
         return;
       }
 
-      const payload = { ...updatedDetails };
+      const payload = { email, name: updatedDetails.name };
 
-      // ✅ Send request to backend
+      // ✅ Step 1: API call
       const response = await fetch(`${urlConfig.backendUrl}/api/auth/update`, {
-        method: "PUT", // Step 1: Task 1 - Use PUT for updating
+        method: "PUT", // ✅ Task 1: Method
         headers: {
-          "Content-Type": "application/json", // Step 1: Task 2 - Add headers
-          "auth-token": authtoken, // Step 1: Task 3 - Pass token for authentication
+          "Content-Type": "application/json", // ✅ Task 2: Headers
+          "auth-token": authtoken,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload), // ✅ Task 3: Body
       });
 
       if (response.ok) {
-        // ✅ Step 1: Task 4 - Update session storage
+        // ✅ Step 4: Update AppContext + session
         sessionStorage.setItem("name", updatedDetails.name);
         setUserName(updatedDetails.name);
 
-        // ✅ Step 1: Task 5 - Update state and show success
+        // ✅ Step 5: Update UI
         setUserDetails(updatedDetails);
         setEditMode(false);
         setChanged("Name Changed Successfully!");
@@ -129,7 +126,6 @@ const Profile = () => {
           <p>
             <b>Email:</b> {userDetails.email}
           </p>
-
           <button
             onClick={handleEdit}
             className="btn btn-outline-primary mt-2"

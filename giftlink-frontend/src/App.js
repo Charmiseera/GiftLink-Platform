@@ -24,6 +24,7 @@ function App() {
         <Route path="/app/search" element={<SearchPage />} />
         <Route path="/app/details/:id" element={<DetailsPage />} />
         <Route path="/app/profile" element={<Profile />} />
+        
 
       </Routes>
     </>
