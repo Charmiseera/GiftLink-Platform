@@ -1,49 +1,63 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
-import { useNavigate } from 'react-router-dom';
+// ✅ Task 1: Import urlConfig
 import { urlConfig } from '../../config';
+// ✅ Task 2: Import useAppContext
 import { useAppContext } from '../../context/AuthContext';
+// ✅ Task 3: Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   // ✅ State variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // ✅ Task 4: Include a state for incorrect password / error message
   const [errorMessage, setErrorMessage] = useState('');
 
-  // ✅ Hooks
+  // ✅ Task 5: Create local variables for navigate, bearerToken, and setIsLoggedIn
   const navigate = useNavigate();
   const { setIsLoggedIn, setUserName } = useAppContext();
+  const bearerToken = sessionStorage.getItem('auth-token');
 
-  // ✅ Handle Login
+  // ✅ Task 6: If bearerToken exists, navigate to MainPage
+  if (bearerToken) {
+    navigate('/app');
+  }
+
+  // ✅ handleLogin function with both steps implemented
   const handleLogin = async () => {
     try {
+      // Step 1: Implement API call
       const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
+      // ✅ Step 2: Access and process data
+      const data = await response.json(); // Task 1: Access data
 
       if (response.ok) {
-        // ✅ Save user details in session storage
+        // Task 2: Set user details in session storage
         sessionStorage.setItem('auth-token', data.authtoken);
         sessionStorage.setItem('name', data.userName);
         sessionStorage.setItem('email', data.userEmail);
 
-        // ✅ Update global context
+        // Task 3: Update context to logged in
         setIsLoggedIn(true);
         setUserName(data.userName);
 
-        // ✅ Redirect to main page
+        // Task 4: Navigate to MainPage
         navigate('/app');
       } else {
-        setErrorMessage(data.error || 'Invalid credentials, please try again.');
+        // Task 5: Clear input + show message if incorrect password
+        setEmail('');
+        setPassword('');
+        setErrorMessage(data.error || 'Incorrect email or password.');
       }
     } catch (error) {
       console.error('Login error:', error);
+      // Task 6: Display generic error message
       setErrorMessage('Something went wrong. Please try again.');
     }
   };
@@ -55,7 +69,7 @@ function LoginPage() {
           <div className="login-card p-4 border rounded shadow-sm bg-white">
             <h2 className="text-center mb-4 fw-bold">Welcome Back</h2>
 
-            {/* ✅ Email Input */}
+            {/* Email Input */}
             <input
               type="email"
               placeholder="Email"
@@ -64,7 +78,7 @@ function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            {/* ✅ Password Input */}
+            {/* Password Input */}
             <input
               type="password"
               placeholder="Password"
@@ -73,12 +87,12 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            {/* ✅ Login Button */}
+            {/* Login Button */}
             <button className="btn btn-primary w-100" onClick={handleLogin}>
               Login
             </button>
 
-            {/* ✅ Error Message */}
+            {/* Error Message */}
             {errorMessage && (
               <div className="alert alert-danger mt-3 text-center">
                 {errorMessage}
