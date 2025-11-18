@@ -126,7 +126,7 @@ cp .env.example .env
 
 Configure your `.env` file with:
 ```env
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/giftlink
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>
 JWT_SECRET=your-super-secret-jwt-key-here
 PORT=3060
 CLOUDINARY_CLOUD_NAME=your-cloud-name
