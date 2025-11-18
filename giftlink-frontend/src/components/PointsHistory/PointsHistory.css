@@ -1,0 +1,266 @@
+.points-history-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.points-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.points-history-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.current-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.balance-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 5px;
+}
+
+.balance-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.error-message {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #c33;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.no-history {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.no-history p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 10px 0;
+}
+
+.history-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.history-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+}
+
+.history-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.history-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.history-table td {
+  padding: 15px;
+  font-size: 0.95rem;
+}
+
+.date-cell {
+  color: #7f8c8d;
+  white-space: nowrap;
+}
+
+.action-cell {
+  font-weight: 500;
+}
+
+.action-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.action-badge.positive {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.action-badge.negative {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.amount-cell {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.amount-cell.positive {
+  color: #27ae60;
+}
+
+.amount-cell.negative {
+  color: #e74c3c;
+}
+
+.balance-cell {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.description-cell {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.points-info {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.points-info h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.points-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.points-info li {
+  padding: 12px 0;
+  font-size: 1rem;
+  color: #34495e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.points-info li:last-child {
+  border-bottom: none;
+}
+
+.points-info strong {
+  color: #2c3e50;
+}
+
+.points-note {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0 0 0;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  border-left: 4px solid #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .points-history-container {
+    padding: 15px;
+    margin: 20px auto;
+  }
+
+  .points-history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .points-history-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .current-balance {
+    align-self: stretch;
+    align-items: center;
+  }
+
+  .history-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .history-table {
+    min-width: 600px;
+  }
+
+  .history-table th,
+  .history-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+
+  .points-info {
+    padding: 20px;
+  }
+
+  .points-info h3 {
+    font-size: 1.2rem;
+  }
+
+  .points-info li {
+    font-size: 0.9rem;
+  }
+}

@@ -9,8 +9,11 @@ const Profile = () => {
   const [updatedDetails, setUpdatedDetails] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [changed, setChanged] = useState("");
+  const [pointsData, setPointsData] = useState(null);
   const navigate = useNavigate();
   const { setUserName } = useAppContext();
+  
+  const userRole = sessionStorage.getItem('role');
 
   useEffect(() => {
     const authtoken = sessionStorage.getItem("auth-token");
@@ -18,8 +21,11 @@ const Profile = () => {
       navigate("/app/login");
     } else {
       fetchUserProfile();
+      if (userRole === 'receiver') {
+        fetchPointsData();
+      }
     }
-  }, [navigate]);
+  }, [navigate, userRole]);
 
   // ✅ Fetch user profile details from session
   const fetchUserProfile = () => {
@@ -32,6 +38,32 @@ const Profile = () => {
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
+  };
+
+  // Fetch gift points data for receivers
+  const fetchPointsData = async () => {
+    try {
+      const authtoken = sessionStorage.getItem("auth-token");
+      const response = await fetch(`${urlConfig.backendUrl}/api/auth/profile`, {
+        headers: {
+          'Authorization': `Bearer ${authtoken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPointsData(data);
+      }
+    } catch (error) {
+      console.error("Error fetching points data:", error);
+    }
+  };
+
+  // Calculate next monthly reset date
+  const getNextResetDate = () => {
+    const now = new Date();
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    return nextMonth.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   };
 
   const handleEdit = () => setEditMode(true);
@@ -145,6 +177,80 @@ const Profile = () => {
             >
               {changed}
             </span>
+          )}
+        </div>
+      )}
+
+      {/* Gift Points Summary for Receivers */}
+      {userRole === 'receiver' && pointsData && (
+        <div className="points-summary-section">
+          <h3 className="points-summary-title">🎁 Gift Points Summary</h3>
+          
+          <div className="points-summary-grid">
+            <div className="points-stat-card">
+              <div className="stat-icon">⭐</div>
+              <div className="stat-content">
+                <div className="stat-label">Current Balance</div>
+                <div className="stat-value">{pointsData.giftPoints} Points</div>
+              </div>
+            </div>
+
+            <div className="points-stat-card">
+              <div className="stat-icon">📊</div>
+              <div className="stat-content">
+                <div className="stat-label">Monthly Requests</div>
+                <div className="stat-value">
+                  {pointsData.monthlyRequestCount} / {pointsData.monthlyRequestLimit}
+                </div>
+              </div>
+            </div>
+
+            <div className="points-stat-card">
+              <div className="stat-icon">📅</div>
+              <div className="stat-content">
+                <div className="stat-label">Next Reset</div>
+                <div className="stat-value-small">{getNextResetDate()}</div>
+              </div>
+            </div>
+
+            {pointsData.isVerified && (
+              <div className="points-stat-card verified-badge">
+                <div className="stat-icon">✅</div>
+                <div className="stat-content">
+                  <div className="stat-label">Status</div>
+                  <div className="stat-value-small">Verified User</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {pointsData.pointsHistory && pointsData.pointsHistory.length > 0 && (
+            <div className="recent-transactions">
+              <h4>Recent Transactions</h4>
+              <div className="transactions-list">
+                {pointsData.pointsHistory.slice(0, 5).map((transaction, index) => (
+                  <div key={index} className="transaction-item">
+                    <div className="transaction-info">
+                      <span className={`transaction-type ${transaction.action}`}>
+                        {transaction.action.charAt(0).toUpperCase() + transaction.action.slice(1)}
+                      </span>
+                      <span className="transaction-date">
+                        {new Date(transaction.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <span className={`transaction-amount ${transaction.amount >= 0 ? 'positive' : 'negative'}`}>
+                      {transaction.amount >= 0 ? '+' : ''}{transaction.amount}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <button 
+                className="btn btn-outline-secondary btn-sm mt-3"
+                onClick={() => navigate('/app/points-history')}
+              >
+                View Full History →
+              </button>
+            </div>
           )}
         </div>
       )}

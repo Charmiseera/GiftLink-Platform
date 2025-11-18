@@ -1,0 +1,102 @@
+/* Professional Navbar Styling */
+.navbar {
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.navbar-brand {
+  font-size: 22px;
+  font-weight: 700;
+  color: #5469d4 !important;
+  letter-spacing: -0.5px;
+  transition: all 0.2s ease;
+}
+
+.navbar-brand:hover {
+  color: #4053c2 !important;
+}
+
+.navbar-nav .nav-link {
+  color: #595959 !important;
+  font-weight: 500;
+  margin: 0 8px;
+  padding: 8px 16px !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+  background: #f5f7fa;
+  color: #1a1a1a !important;
+}
+
+.navbar-nav .nav-link:active {
+  background: #e8eaed;
+}
+
+/* Username/Profile Link */
+.navbar-nav .nav-link[style*="cursor: pointer"] {
+  background: #f0f5ff;
+  color: #5469d4 !important;
+  font-weight: 600;
+  border: 1px solid #d6e4ff;
+}
+
+.navbar-nav .nav-link[style*="cursor: pointer"]:hover {
+  background: #d6e4ff;
+  color: #4053c2 !important;
+}
+
+/* Logout Button */
+.btn-link.nav-link.text-danger {
+  background: #fff2f0 !important;
+  color: #ff4d4f !important;
+  font-weight: 600 !important;
+  border: 1px solid #ffccc7 !important;
+  border-radius: 6px !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-link.nav-link.text-danger:hover {
+  background: #ffccc7 !important;
+  color: #cf1322 !important;
+  border-color: #ffa39e !important;
+}
+
+/* Navbar Toggler */
+.navbar-toggler {
+  border: 1px solid #d9d9d9;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 2px rgba(84, 105, 212, 0.1);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2889, 89, 89, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: #fafafa;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+    border: 1px solid #e8e8e8;
+  }
+  
+  .navbar-nav .nav-link {
+    margin: 4px 0;
+  }
+}
+

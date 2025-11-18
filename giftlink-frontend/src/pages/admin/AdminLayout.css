@@ -1,0 +1,19 @@
+/* Admin Layout Styles */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.admin-content {
+  flex: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .admin-content {
+    margin-left: 70px;
+  }
+}

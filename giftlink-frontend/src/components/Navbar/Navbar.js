@@ -1,21 +1,27 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AuthContext';
+import GiftPointsBadge from './GiftPointsBadge';
+import './Navbar.css';
 
 export default function Navbar() {
   const { isLoggedIn, setIsLoggedIn, userName, setUserName } = useAppContext();
   const navigate = useNavigate();
+  const [userRole, setUserRole] = React.useState('');
 
   useEffect(() => {
     const token = sessionStorage.getItem('auth-token');
     const name = sessionStorage.getItem('name');
+    const role = sessionStorage.getItem('role');
 
     if (token && name) {
       setIsLoggedIn(true);
       setUserName(name);
+      setUserRole(role || 'receiver');
     } else {
       setIsLoggedIn(false);
       setUserName('');
+      setUserRole('');
     }
   }, [setIsLoggedIn, setUserName]);
 
@@ -59,6 +65,49 @@ export default function Navbar() {
             <Link className="nav-link" to="/app/search">Search</Link>
           </li>
 
+          {/* Show Add Item link only when logged in */}
+          {isLoggedIn && (
+            <>
+              {/* Show Admin Dashboard for admin users */}
+              {userRole === 'admin' && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/app/admin" style={{ 
+                    color: '#dc3545', 
+                    fontWeight: '600' 
+                  }}>
+                    🛡️ Admin Dashboard
+                  </Link>
+                </li>
+              )}
+              
+              {/* Show Add Item and My Donations only for donors */}
+              {userRole === 'donor' && (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/app/add-item">Add Item</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/app/my-donations">My Donations</Link>
+                  </li>
+                </>
+              )}
+              
+              {/* Show My Requests only for receivers */}
+              {userRole === 'receiver' && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/app/my-requests">My Requests</Link>
+                </li>
+              )}
+            </>
+          )}
+
+          {/* Show Gift Points Badge for receivers */}
+          {isLoggedIn && userRole === 'receiver' && (
+            <li className="nav-item d-flex align-items-center">
+              <GiftPointsBadge />
+            </li>
+          )}
+
           {/* Conditional rendering based on login state */}
           {isLoggedIn ? (
             <>
@@ -91,11 +140,31 @@ export default function Navbar() {
           ) : (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to="/app/login">Login</Link>
+                <Link 
+                  className="btn btn-outline-primary" 
+                  to="/app/login"
+                  style={{ 
+                    marginRight: '8px',
+                    padding: '6px 20px',
+                    borderRadius: '6px',
+                    fontWeight: '500'
+                  }}
+                >
+                  Login
+                </Link>
               </li>
-
               <li className="nav-item">
-                <Link className="nav-link" to="/app/register">Register</Link>
+                <Link 
+                  className="btn btn-primary text-white" 
+                  to="/app/register"
+                  style={{ 
+                    padding: '6px 20px',
+                    borderRadius: '6px',
+                    fontWeight: '500'
+                  }}
+                >
+                  Register
+                </Link>
               </li>
             </>
           )}

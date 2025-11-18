@@ -11,6 +11,7 @@ function LoginPage() {
   // ✅ State variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState(''); // 'donor' or 'receiver'
   // ✅ Task 4: Include a state for incorrect password / error message
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -20,18 +21,33 @@ function LoginPage() {
   const bearerToken = sessionStorage.getItem('auth-token');
 
   // ✅ Task 6: If bearerToken exists, navigate to MainPage
-  if (bearerToken) {
-    navigate('/app');
-  }
+  React.useEffect(() => {
+    if (bearerToken) {
+      navigate('/app');
+    }
+  }, [bearerToken, navigate]);
 
-  // ✅ handleLogin function with both steps implemented
+  // ✅ handleLogin function with role validation
   const handleLogin = async () => {
+    // Check if it's admin login (admin@giftlink.com doesn't need role selection)
+    const isAdminEmail = email.toLowerCase() === 'admin@giftlink.com';
+    
+    // Validate role selection for non-admin users
+    if (!selectedRole && !isAdminEmail) {
+      setErrorMessage('Please select whether you are a Donor or Receiver');
+      return;
+    }
+
     try {
-      // Step 1: Implement API call
+      // Step 1: Implement API call with role (optional for admin)
       const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ 
+          email, 
+          password, 
+          role: isAdminEmail ? undefined : selectedRole 
+        })
       });
 
       // ✅ Step 2: Access and process data
@@ -42,6 +58,7 @@ function LoginPage() {
         sessionStorage.setItem('auth-token', data.authtoken);
         sessionStorage.setItem('name', data.userName);
         sessionStorage.setItem('email', data.userEmail);
+        sessionStorage.setItem('role', data.role);
 
         // Task 3: Update context to logged in
         setIsLoggedIn(true);
@@ -63,50 +80,94 @@ function LoginPage() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="login-card p-4 border rounded shadow-sm bg-white">
-            <h2 className="text-center mb-4 fw-bold">Welcome Back</h2>
+    <div className="login-page-wrapper">
+      <div className="login-card">
+        <h2>Welcome Back</h2>
+        <p className="subtitle">Login to continue to GiftLink</p>
 
-            {/* Email Input */}
-            <input
-              type="email"
-              placeholder="Email"
-              className="form-control mb-3"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            {/* Password Input */}
-            <input
-              type="password"
-              placeholder="Password"
-              className="form-control mb-3"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            {/* Login Button */}
-            <button className="btn btn-primary w-100" onClick={handleLogin}>
-              Login
-            </button>
-
-            {/* Error Message */}
-            {errorMessage && (
-              <div className="alert alert-danger mt-3 text-center">
-                {errorMessage}
+        {/* Role Selection */}
+        <div className="role-selection-login">
+          <label className="form-label">I am a:</label>
+          <div className="role-options">
+            <div 
+              className={`role-option ${selectedRole === 'donor' ? 'selected' : ''}`}
+              onClick={() => setSelectedRole('donor')}
+            >
+              <div className="role-icon">🎁</div>
+              <div className="role-info">
+                <h4>Donor</h4>
+                <p>I want to donate items</p>
               </div>
-            )}
+              <div className="radio-indicator">
+                {selectedRole === 'donor' && '✓'}
+              </div>
+            </div>
 
-            <p className="mt-4 text-center">
-              New here?{' '}
-              <a href="/app/register" className="text-primary">
-                Register Here
-              </a>
-            </p>
+            <div 
+              className={`role-option ${selectedRole === 'receiver' ? 'selected' : ''}`}
+              onClick={() => setSelectedRole('receiver')}
+            >
+              <div className="role-icon">🙏</div>
+              <div className="role-info">
+                <h4>Receiver</h4>
+                <p>I need to request items</p>
+              </div>
+              <div className="radio-indicator">
+                {selectedRole === 'receiver' && '✓'}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Email Input */}
+        <div className="form-group mb-3">
+          <label htmlFor="email" className="form-label">Email Address</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        {/* Password Input */}
+        <div className="form-group mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        {/* Login Button */}
+        <button 
+          className="btn btn-primary" 
+          onClick={handleLogin}
+          style={{
+            background: selectedRole === 'receiver' ? '#28a745' : '#5469d4',
+            borderColor: selectedRole === 'receiver' ? '#28a745' : '#5469d4'
+          }}
+        >
+          Login {selectedRole && `as ${selectedRole === 'donor' ? 'Donor' : 'Receiver'}`}
+        </button>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="alert">
+            {errorMessage}
+          </div>
+        )}
+
+        <p>
+          New here?{' '}
+          <a href="/app/register">
+            Register Here
+          </a>
+        </p>
       </div>
     </div>
   );

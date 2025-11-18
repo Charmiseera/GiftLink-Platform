@@ -1,119 +1,236 @@
-/* 🌸 Task 1: Style the search input field */
-.search-input {
-  width: 70%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-  margin-right: 10px;
+/* Professional Search Page Styling */
+.search-page-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 40px 20px;
 }
 
-/* 🌸 Task 2: Style the search button */
+/* Page Title */
+.search-page-container::before {
+  content: 'Search Gifts';
+  display: block;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e8e8e8;
+}
+
+/* Filter Section */
+.filter-section {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.filter-section h5 {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.filter-section .form-label {
+  color: #595959;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Dropdown Filters */
+.dropdown-filter {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  margin-bottom: 16px;
+  font-size: 14px;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-filter:focus {
+  border-color: #5469d4;
+  box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.1);
+  outline: none;
+}
+
+/* Age Range Slider */
+.age-range-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #e8e8e8;
+  outline: none;
+  margin: 16px 0;
+  -webkit-appearance: none;
+}
+
+.age-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #5469d4;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.age-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #5469d4;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Search Input & Button */
+.d-flex {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #5469d4;
+  box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.1);
+  outline: none;
+}
+
 .search-button {
-  width: 20%;
-  background-color: #007bff;
+  padding: 12px 32px;
+  background: #5469d4;
   color: #ffffff;
   border: none;
-  padding: 10px;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .search-button:hover {
-  background-color: #0056b3;
+  background: #4053c2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(84, 105, 212, 0.3);
 }
 
-/* 🌸 Task 3: Customize dropdown filters */
-.dropdown-filter {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  font-size: 15px;
-  background-color: #fff;
+/* Search Results Cards */
+.results-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
-/* 🌸 Task 4: Style the age range slider */
-.age-range-slider {
-  width: 100%;
-  margin: 15px 0;
-}
-
-/* 🌸 Task 5: Enhance search results cards appearance */
 .search-results-card {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  margin-bottom: 20px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 0;
   overflow: hidden;
   cursor: pointer;
-  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease;
-  background-color: #fff;
+  transition: all 0.2s ease;
+  border: 1px solid #e8e8e8;
 }
 
-/* 🌸 Task 6: Style the “No products found” alert message */
-.no-results-alert {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 0.75rem 1.25rem;
-  margin-top: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  text-align: center;
-}
-
-/* 🌸 Task 7: Hover effect for search results cards */
 .search-results-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  border-color: #5469d4;
 }
 
-/* 🌸 Task 8: Ensure images are displayed appropriately */
-.card-img-top {
+.search-results-card .card-img-top {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-/* 🌸 Task 9: Responsive layout for various devices */
+.search-results-card h5 {
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 16px 20px 8px;
+}
+
+.search-results-card p {
+  color: #666;
+  margin: 0 20px 8px;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.search-results-card small {
+  color: #8c8c8c;
+  font-weight: 500;
+  display: block;
+  margin: 0 20px 16px;
+  padding: 6px 12px;
+  background: #f5f7fa;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 13px;
+}
+
+/* No Results Alert */
+.no-results-alert {
+  background: #fff7e6;
+  color: #d46b08;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #ffd591;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .search-input {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .search-button {
-    width: 100%;
-  }
-
-  .dropdown-filter {
     font-size: 14px;
   }
 
-  .results-container {
-    grid-template-columns: 1fr;
+  .search-button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .filter-section {
+    padding: 20px;
+  }
+
+  .search-results-card .card-img-top {
+    height: 180px;
   }
 }
 
-/* 🌸 Task 10: Overall cohesive design */
-.search-page-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-}
-
-.filter-section {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.results-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+@media (max-width: 576px) {
+  .d-flex {
+    flex-direction: column;
+  }
+  
+  .search-button {
+    width: 100%;
+  }
 }

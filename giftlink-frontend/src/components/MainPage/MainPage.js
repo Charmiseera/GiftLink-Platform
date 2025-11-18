@@ -1,96 +1,189 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { urlConfig } from '../../config';
+import { itemsApi } from '../../api/itemsApi';
+import SkeletonLoader from '../SkeletonLoader/SkeletonLoader';
+import { ToastContainer } from '../Toast/Toast';
+import { useToast } from '../../hooks/useToast';
+import './MainPage.css';
 
 function MainPage() {
-  const [gifts, setGifts] = useState([]);
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [pagination, setPagination] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const { toasts, removeToast, success, error: showError } = useToast();
 
-  // ✅ Fetch all gifts from backend
+  const categories = [
+    { name: 'All', icon: '🏠' },
+    { name: 'Living', icon: '🛋️' },
+    { name: 'Bedroom', icon: '🛏️' },
+    { name: 'Bathroom', icon: '🚿' },
+    { name: 'Kitchen', icon: '🍳' },
+    { name: 'Office', icon: '💼' }
+  ];
+
+  // Fetch all available items from backend
   useEffect(() => {
-    const fetchGifts = async () => {
+    const fetchItems = async () => {
       try {
-        const response = await fetch(`${urlConfig.backendUrl}/api/gifts`);
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-        const data = await response.json();
-        setGifts(data);
+        setLoading(true);
+        const data = await itemsApi.getAllItems('AVAILABLE', currentPage, 20, selectedCategory !== 'All' ? selectedCategory : null);
+        
+        // Handle both old format (array) and new format (object with items + pagination)
+        if (Array.isArray(data)) {
+          setItems(data);
+          setFilteredItems(data);
+          setPagination(null);
+        } else {
+          setItems(data.items || []);
+          setFilteredItems(data.items || []);
+          setPagination(data.pagination);
+          if (currentPage === 1 && data.items.length > 0) {
+            success(`Found ${data.pagination.totalItems} available items!`);
+          }
+        }
+        setError('');
       } catch (error) {
-        console.error('Error fetching gifts:', error);
+        console.error('Error fetching items:', error);
+        const errorMessage = error.response?.data?.error || 'Failed to load items. Please try again.';
+        setError(errorMessage);
+        showError(errorMessage);
       } finally {
         setLoading(false);
       }
     };
-    fetchGifts();
-  }, []);
+    fetchItems();
+  }, [currentPage, selectedCategory, showError, success]);
 
-  // ✅ Navigate to details page
-  const goToDetailsPage = (productId) => {
-    navigate(`/app/details/${productId}`);
+  // Filter items by category
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setFilteredItems(items);
+    } else {
+      const filtered = items.filter(item => item.category === selectedCategory);
+      setFilteredItems(filtered);
+    }
+  }, [selectedCategory, items]);
+
+  // Handle category filter change
+  // Navigate to details page
+  const goToDetailsPage = (itemId) => {
+    navigate(`/app/details/${itemId}`);
   };
 
-  // ✅ Format timestamp safely
-  const formatDate = (timestamp) => {
-    if (!timestamp) return 'No date available';
-    const date = new Date(timestamp * 1000);
-    return date.toLocaleDateString('default', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
-
-  // ✅ Badge color based on condition
+  // Badge color based on condition
   const getConditionClass = (condition) => {
-    if (condition === 'New') return 'badge bg-success';
-    if (condition === 'Like New') return 'badge bg-info';
-    return 'badge bg-warning text-dark';
+    switch(condition) {
+      case 'New': return 'badge-new';
+      case 'Like New': return 'badge-like-new';
+      case 'Good': return 'badge-good';
+      case 'Fair': return 'badge-fair';
+      default: return 'badge-default';
+    }
   };
-
-  // ✅ Show loading indicator
-  if (loading) {
-    return <div className="text-center mt-5">Loading gifts...</div>;
-  }
 
   return (
-    <div className="container mt-5">
-      <div className="row g-4">
-        {gifts.length > 0 ? (
-          gifts.map((gift) => (
-            <div key={gift._id || gift.id} className="col-md-4">
-              <div className="card product-card shadow-sm">
+    <div className="main-page-container">
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-                {/* ✅ Gift Image */}
-                {gift.image ? (
-                  <img
-                    src={gift.image}
-                    alt={gift.name}
-                    className="card-img-top"
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
+      {/* Page Header */}
+      <div className="page-header">
+        <h1>Available Items</h1>
+        <p>Browse items available for donation</p>
+        {pagination && (
+          <span className="item-count-header">
+            Showing {filteredItems.length} of {pagination.totalItems} items
+          </span>
+        )}
+      </div>
+
+      {/* Category Filters */}
+      <div className="filter-section">
+        <div className="filter-label">Filter by Category:</div>
+        <div className="category-filters">
+          {categories.map((cat) => (
+            <button
+              key={cat.name}
+              onClick={() => {
+                setSelectedCategory(cat.name);
+                setCurrentPage(1); // Reset to page 1 when changing category
+              }}
+              className={`filter-btn ${selectedCategory === cat.name ? 'active' : ''}`}
+            >
+              <span className="filter-icon">{cat.icon}</span>
+              <span className="filter-text">{cat.name}</span>
+              {pagination && selectedCategory === cat.name && (
+                <span className="item-count">
+                  ({pagination.totalItems})
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Error Message */}
+      {error && !loading && (
+        <div className="error-banner">
+          {error}
+        </div>
+      )}
+
+      {/* Loading Skeleton */}
+      {loading ? (
+        <SkeletonLoader count={6} />
+      ) : (
+        <>
+          {/* Items Grid */}
+          <div className="items-grid">
+            {filteredItems.length > 0 ? (
+          filteredItems.map((item) => (
+            <div key={item._id} className="item-card">
+              
+              {/* Item Image */}
+              <div className="item-image">
+                {item.isLegacy && (
+                  <div className="legacy-ribbon">Legacy</div>
+                )}
+                {item.image ? (
+                  <img src={item.image} alt={item.name} />
                 ) : (
-                  <div className="text-center p-5 text-muted">
-                    No Image Available
+                  <div className="no-image">
+                    <span>📦</span>
+                    <p>No image</p>
                   </div>
                 )}
+              </div>
 
-                {/* ✅ Gift Details */}
-                <div className="card-body">
-                  <h5 className="card-title">{gift.name || 'Unnamed Gift'}</h5>
+              {/* Item Details */}
+              <div className="item-body">
+                <h3 className="item-title">{item.name}</h3>
+                
+                <div className="item-meta">
+                  <span className={`condition-badge ${getConditionClass(item.condition)}`}>
+                    {item.condition}
+                  </span>
+                  <span className="category-tag">{item.category}</span>
+                </div>
 
-                  <p className="card-text">
-                    <span className={getConditionClass(gift.condition)}>
-                      {gift.condition || 'Unknown'}
-                    </span>
-                  </p>
+                <p className="item-description">
+                  {item.description && item.description.length > 80
+                    ? `${item.description.substring(0, 80)}...`
+                    : item.description || 'No description available'}
+                </p>
 
-                  <p className="card-text text-muted">
-                    Added on: {formatDate(gift.date_added)}
-                  </p>
-
+                <div className="item-footer">
+                  <span className="item-date">
+                    📍 {item.zipcode}
+                  </span>
                   <button
-                    onClick={() => goToDetailsPage(gift._id || gift.id)}
-                    className="btn btn-primary w-100"
+                    onClick={() => goToDetailsPage(item._id)}
+                    className="btn-view-details"
                   >
                     View Details
                   </button>
@@ -99,11 +192,47 @@ function MainPage() {
             </div>
           ))
         ) : (
-          <div className="text-center text-muted mt-5 w-100">
-            <h5>No gifts found.</h5>
+          <div className="empty-state">
+            <div className="empty-icon">📦</div>
+            <h3>No items found</h3>
+            <p>
+              {selectedCategory === 'All'
+                ? 'Check back later for new donations!'
+                : `No items available in ${selectedCategory} category. Try another category.`}
+            </p>
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {!loading && filteredItems.length > 0 && pagination && (
+        <div className="pagination-controls">
+          <button
+            onClick={() => setCurrentPage(prev => prev - 1)}
+            disabled={!pagination.hasPrevPage}
+            className="btn-pagination"
+          >
+            ← Previous
+          </button>
+          
+          <span className="pagination-info">
+            Page {pagination.currentPage} of {pagination.totalPages} 
+            ({pagination.totalItems} items total)
+          </span>
+          
+          <button
+            onClick={() => setCurrentPage(prev => prev + 1)}
+            disabled={!pagination.hasNextPage}
+            className="btn-pagination"
+          >
+            Next →
+          </button>
+        </div>
+      )}
+    </>
+      )}
+
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 }

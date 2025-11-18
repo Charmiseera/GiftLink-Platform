@@ -1,0 +1,165 @@
+/* User Ratings Component Styles */
+
+.ratings-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.ratings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.ratings-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-stars {
+  color: #ffd700;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.rating-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.rating-count {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.ratings-loading {
+  text-align: center;
+  padding: 40px;
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.no-ratings {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #8c8c8c;
+}
+
+.ratings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rating-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+}
+
+.rating-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.rating-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.rating-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rating-card .rating-stars {
+  font-size: 18px;
+}
+
+.rating-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.rating-date {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.rating-review {
+  color: #595959;
+  line-height: 1.6;
+  margin: 12px 0;
+  font-size: 15px;
+}
+
+.rating-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.rating-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.rating-item {
+  font-size: 13px;
+  color: #8c8c8c;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ratings-container {
+    padding: 20px;
+  }
+
+  .ratings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .average-rating {
+    align-self: flex-start;
+  }
+
+  .rating-card {
+    padding: 16px;
+  }
+
+  .rating-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

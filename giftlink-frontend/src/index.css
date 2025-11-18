@@ -72,9 +72,9 @@ textarea:focus {
 }
 
 /* 🌸 Page Containers */
-.container {
-  margin-top: 40px;
-}
+/* Removed global .container styling to avoid Bootstrap conflicts */
+/* Use component-specific wrapper classes instead */
+
 
 /* 🌸 Links */
 a {

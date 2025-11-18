@@ -1,0 +1,261 @@
+/* Report Modal Styles */
+
+.report-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.report-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 550px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.report-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.report-modal-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #cf1322;
+}
+
+.report-modal-close {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #8c8c8c;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.report-modal-close:hover {
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+.report-modal-body {
+  padding: 28px;
+}
+
+.report-subtitle {
+  font-size: 16px;
+  color: #595959;
+  margin-bottom: 20px;
+}
+
+.report-subtitle strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.report-warning {
+  background: #fff7e6;
+  border: 1px solid #ffd591;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #d46b08;
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.required {
+  color: #cf1322;
+}
+
+.optional {
+  font-weight: 400;
+  color: #8c8c8c;
+}
+
+.form-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #cf1322;
+  box-shadow: 0 0 0 3px rgba(207, 19, 34, 0.1);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #cf1322;
+  box-shadow: 0 0 0 3px rgba(207, 19, 34, 0.1);
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 4px;
+}
+
+.report-error {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #cf1322;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+.report-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid #e8e8e8;
+  background: #fafafa;
+  border-radius: 0 0 16px 16px;
+  position: sticky;
+  bottom: 0;
+}
+
+.btn-cancel,
+.btn-submit {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel {
+  background: white;
+  color: #595959;
+  border: 1px solid #d9d9d9;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #8c8c8c;
+}
+
+.btn-submit {
+  background: #5469d4;
+  color: white;
+}
+
+.btn-submit.btn-danger {
+  background: #cf1322;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #a8071a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(207, 19, 34, 0.3);
+}
+
+.btn-cancel:disabled,
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .report-modal-content {
+    width: 95%;
+    margin: 20px;
+    max-height: 95vh;
+  }
+
+  .report-modal-header {
+    padding: 20px;
+  }
+
+  .report-modal-header h3 {
+    font-size: 20px;
+  }
+
+  .report-modal-body {
+    padding: 20px;
+  }
+
+  .report-modal-footer {
+    flex-direction: column;
+    padding: 16px 20px;
+  }
+}

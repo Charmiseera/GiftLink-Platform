@@ -1,0 +1,58 @@
+/* Gift Points Badge Styles */
+
+.gift-points-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 12px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.gift-points-badge:hover {
+  transform: scale(1.05);
+}
+
+/* High balance - Green */
+.points-high {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #10b981;
+}
+
+/* Medium balance - Yellow/Orange */
+.points-medium {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #f59e0b;
+}
+
+/* Low balance - Red */
+.points-low {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #ef4444;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gift-points-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    margin-right: 8px;
+  }
+}

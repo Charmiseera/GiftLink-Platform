@@ -1,44 +1,217 @@
-.register-card {
-    background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+/* Professional Register Page Styling */
+.register-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f7fa;
+  padding: 20px;
 }
 
-.register-card .form-label {
-    font-weight: 600;
+.register-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+}
+
+.register-card h2 {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.register-card h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #5469d4;
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+.register-card .subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+/* Role Selection in Register Page */
+.role-selection-login {
+  margin-bottom: 24px;
+}
+
+.role-selection-login .form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.role-option:hover {
+  border-color: #5469d4;
+  background: #f5f7fa;
+}
+
+.role-option.selected {
+  border-color: #5469d4;
+  background: #f0f4ff;
+  box-shadow: 0 2px 8px rgba(84, 105, 212, 0.2);
+}
+
+.role-option .role-icon {
+  font-size: 32px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.role-option .role-info {
+  flex: 1;
+}
+
+.role-option .role-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.role-option .role-info p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  text-align: left;
+}
+
+.role-option .radio-indicator {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #d9d9d9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.role-option.selected .radio-indicator {
+  background: #5469d4;
+  border-color: #5469d4;
+}
+
+/* Update receiver color when selected */
+.role-option.selected:nth-child(2) .radio-indicator {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .register-card input {
-    border-radius: 0.25rem;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  padding: 12px 16px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  width: 100%;
 }
 
-.register-card .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+.register-card input:focus {
+  border-color: #5469d4;
+  box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.1);
+  outline: none;
+}
+
+.register-card input::placeholder {
+  color: #999;
 }
 
 .register-card .btn-primary {
-    background-color: #0056b3;
-    border: none;
+  background: #5469d4;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 8px;
 }
 
-.register-card .btn-secondary {
-    background-color: #dc3545;
-    border: none;
+.register-card .btn-primary:hover {
+  background: #4053c2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(84, 105, 212, 0.3);
 }
 
-.register-card .text-primary {
-    color: #0056b3;
+.register-card .btn-primary:active {
+  transform: translateY(0);
 }
 
-.register-card .text-secondary {
-    color: #6c757d;
+.register-card .alert {
+  border-radius: 6px;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-top: 16px;
+  background-color: #fff2f0;
+  border-left: 3px solid #ff4d4f;
+  color: #cf1322;
 }
 
-/* Additional styles */
-a.text-primary:hover {
-    text-decoration: underline;
+.register-card p {
+  color: #666;
+  font-size: 14px;
+  margin-top: 24px;
+  text-align: center;
 }
 
-a.text-secondary:hover {
-    text-decoration: underline;
+.register-card a {
+  color: #5469d4;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.register-card a:hover {
+  color: #4053c2;
+  text-decoration: underline;
 }
